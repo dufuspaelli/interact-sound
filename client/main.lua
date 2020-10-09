@@ -3,7 +3,7 @@ local PlayerData = {}
 local Categories = {
     LEO = {
         "police", "sheriff", "state"
-    }
+    },
     Emergency = {
         "police", "sheriff", "state", "ambulance"
     }
@@ -29,6 +29,15 @@ end)
 function has_value (tab, val)
     for index, value in pairs(tab) do
         if value == val then
+            return true
+        end
+    end
+    return false
+end
+
+function has_index (tab, ind)
+    for index, value in pairs(tab) do
+        if index == ind then
             return true
         end
     end
@@ -149,7 +158,7 @@ end)
 RegisterNetEvent('InteractSound_CL:PlayForJob')
 AddEventHandler('InteractSound_CL:PlayForJob', function(soundFile, soundVolume, job)
     if PlayerData.job ~= nil then
-        if has_value(Categories, job) then
+        if has_index(Categories, job) then
             if has_value(Categories[job], PlayerData.job.name) then
                 SendNUIMessage({
                     transactionType     = 'playSound',
