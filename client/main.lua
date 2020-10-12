@@ -1,3 +1,55 @@
+ESX              = nil
+local PlayerData = {}
+local Categories = {
+    LEO = {
+        "police", "sheriff", "state"
+    },
+    Emergency = {
+        "police", "sheriff", "state", "ambulance"
+    }
+}
+
+Citizen.CreateThread(function()
+	while ESX == nil do
+		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+		Citizen.Wait(0)
+	end
+
+	while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(10)
+	end
+
+	PlayerData = ESX.GetPlayerData()
+
+end)
+
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded', function(xPlayer)
+  PlayerData = xPlayer   
+end)
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+  PlayerData.job = job
+end)
+
+function has_value (tab, val)
+    for index, value in pairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+    return false
+end
+
+function has_index (tab, ind)
+    for index, value in pairs(tab) do
+        if index == ind then
+            return true
+        end
+    end
+    return false
+end
 
 ------
 -- InteractionSound by Scott
@@ -107,5 +159,26 @@ AddEventHandler('InteractSound_CL:PlayWithinDistanceOS', function(playerCoords, 
             transactionFile     = soundFile,
             transactionVolume   = soundVolume
         })
+    end
+end)
+
+RegisterNetEvent('InteractSound_CL:PlayForJob')
+AddEventHandler('InteractSound_CL:PlayForJob', function(soundFile, soundVolume, job)
+    if PlayerData.job ~= nil then
+        if has_index(Categories, job) then
+            if has_value(Categories[job], PlayerData.job.name) then
+                SendNUIMessage({
+                    transactionType     = 'playSound',
+                    transactionFile     = soundFile,
+                    transactionVolume   = soundVolume
+                })
+            end
+        elseif PlayerData.job.name == job then
+            SendNUIMessage({
+                transactionType     = 'playSound',
+                transactionFile     = soundFile,
+                transactionVolume   = soundVolume
+            })
+        end
     end
 end)
