@@ -17,7 +17,5 @@ files {
     'client/html/index.html',
     -- Begin Sound Files Here...
     -- client/html/sounds/ ... .ogg
-    'client/html/sounds/**/*.ogg',
-    'client/html/sounds/01_conjunctives/IN_01.ogg'
-    
+    'client/html/sounds/**/*.ogg'
 }

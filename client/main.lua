@@ -11,7 +11,7 @@ end)
 
 RegisterNetEvent('InteractSound_CL:PlayOnOne', function(soundFile, soundVolume)
     
-    if hasPlayerLoaded then
+    if true then
         print("triggered soundplay")
         SendNUIMessage({
             transactionType = 'playSound',
